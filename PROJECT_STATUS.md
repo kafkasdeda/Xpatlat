@@ -128,6 +128,15 @@ C:\projeler\Xpatlat
    - Error collection testleri
    - Debug log'lar her testte mevcut
 
+16. **Advanced Twitter Operators Tamamlandı** (5 Mayıs 2025) ✅
+   - min_faves ve min_retweets operatorleri ✅
+   - filter:media, filter:images, filter:videos ✅
+   - lang operatörü ✅
+   - Exclude operatorleri (-) ✅
+   - Hashtag filter desteği ✅
+   - Question (?) ve reply filtreleri ✅
+   - NOT: Tüm özellikler aslında CORE-001'de implement edilmişti
+
 ### Proje Yapısı
 ```
 Xpatlat/
@@ -350,16 +359,14 @@ npm run test
 
 ## 📋 Bir Sonraki Oturumda Yapılacaklar
 
-1. CORE-003 (URL Validation) için Pull Request oluştur ve merge et
-2. CORE-004 (Advanced operators) implementasyonu
-3. CORE-004 (Advanced operators) implementasyonu
+1. CORE-005 (Search templates) implementasyonu
+2. UI-003 (Search history UI) tamamla
+3. DOC-003 (README update) yaz
 4. Test coverage'ı %80'in üzerine çıkar
-5. Hazır arama şablonlarını oluştur (CORE-005)
-6. Arama geçmişi UI'nı tamamla (UI-003)
-7. Performance optimizasyonları
-8. E2E test senaryolarını hazırla
-9. README.md dosyasını güncelle (proje kurulumu, kullanım talimatları)
-10. GitHub Actions CI/CD pipeline kurulumu
+5. Performance optimizasyonları
+6. E2E test senaryolarını hazırla
+7. GitHub Actions CI/CD pipeline kurulumu
+8. Responsive design iyileştirmeleri
 
 ## 🎯 Proje Hedefleri
 
@@ -374,4 +381,4 @@ npm run test
 
 ---
 
-*Son güncelleme: 5 Mayıs 2025 (TEST-002 tamamlandı)*
+*Son güncelleme: 5 Mayıs 2025 (CORE-004 tamamlandı)*
