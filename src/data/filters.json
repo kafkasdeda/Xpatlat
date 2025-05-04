@@ -1,0 +1,31 @@
+[
+  {
+    "key": "textSearch",
+    "type": "text",
+    "label": "İçerik Ara",
+    "placeholder": "#mizah, caps, gündem",
+    "default": ""
+  },
+  {
+    "key": "likesMin",
+    "type": "range",
+    "label": "En Az Beğeni",
+    "min": 0,
+    "max": 1000,
+    "step": 10,
+    "default": 100
+  },
+  {
+    "key": "lang",
+    "type": "select",
+    "label": "Dil",
+    "options": ["tr", "en"],
+    "default": "tr"
+  },
+  {
+    "key": "media",
+    "type": "checkbox",
+    "label": "Görsel İçeriyor",
+    "default": true
+  }
+]
