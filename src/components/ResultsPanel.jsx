@@ -9,8 +9,10 @@ import React, { useState } from 'react';
  * @param {Object} props
  * @param {string} props.searchUrl - Generated search URL
  * @param {SearchFilters} props.filters - Current filters for display
+ * @param {import('../utils/filterValidator').ValidationError[]} props.errors - Validation errors
+ * @param {Function} [props.onSearchGenerated] - Callback when URL is generated
  */
-const ResultsPanel = ({ searchUrl, filters }) => {
+const ResultsPanel = ({ searchUrl, filters, errors = [], onSearchGenerated }) => {
   const [copied, setCopied] = useState(false);
 
   const handleCopyUrl = async () => {
@@ -24,6 +26,9 @@ const ResultsPanel = ({ searchUrl, filters }) => {
   };
 
   const handleOpenTwitter = () => {
+    if (onSearchGenerated) {
+      onSearchGenerated();
+    }
     window.open(searchUrl, '_blank', 'noopener,noreferrer');
   };
 
@@ -31,6 +36,8 @@ const ResultsPanel = ({ searchUrl, filters }) => {
   const activeFilters = Object.entries(filters).filter(([_, value]) => {
     return value !== '' && value !== null && value !== false;
   });
+
+  const hasErrors = errors && errors.length > 0;
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -64,7 +71,8 @@ const ResultsPanel = ({ searchUrl, filters }) => {
       <div className="flex gap-3">
         <button
           onClick={handleCopyUrl}
-          className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2"
+          disabled={hasErrors}
+          className={`flex-1 px-4 py-2 ${hasErrors ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-md transition-colors duration-200 flex items-center justify-center gap-2`}
         >
           {copied ? (
             <>
@@ -84,7 +92,8 @@ const ResultsPanel = ({ searchUrl, filters }) => {
         </button>
         <button
           onClick={handleOpenTwitter}
-          className="flex-1 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 transition-colors duration-200 flex items-center justify-center gap-2"
+          disabled={hasErrors}
+          className={`flex-1 px-4 py-2 ${hasErrors ? 'bg-gray-400 cursor-not-allowed' : 'bg-gray-800 hover:bg-gray-900'} text-white rounded-md transition-colors duration-200 flex items-center justify-center gap-2`}
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
