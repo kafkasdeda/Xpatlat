@@ -1,3 +1,187 @@
+## 🤖 Git İşlemlerini Otomatikleştirme
+
+### git_yapilacaklar.py Kullanımı
+
+Git işlemlerini kolaylaştırmak için `git_yapilacaklar.py` script'i kullanılabilir.
+
+```bash
+# Script'i çalıştır
+python git_yapilacaklar.py
+```
+
+#### Script Seçenekleri:
+
+1. **Mevcut değişiklikleri kaydet ve push et**
+   - Tüm değişiklikleri otomatik olarak ekler
+   - Commit atar ve push eder
+
+2. **PR oluşturma talimatlarını göster**
+   - GitHub'da PR oluşturma adımlarını gösterir
+
+3. **Main branch'i güncelle**
+   - Main branch'e geçer ve son değişiklikleri çeker
+
+4. **Yeni task başlat**
+   - Yeni feature branch oluşturur
+   - Boş commit atar
+   - GitHub'a push eder
+
+5. **Tam iş akışı**
+   - Değişiklikleri kaydeder
+   - PR talimatlarını gösterir
+   - Main branch'i günceller
+   - İsteğe bağlı yeni task başlatır
+
+### Örnek Kullanım:
+
+```bash
+# Yeni task başlatmak için
+python git_yapilacaklar.py
+# Seçim: 4
+# Task ID: CORE-005
+# Task açıklaması: search templates
+```
+
+### Tam İş Akışı İçin:
+
+```bash
+# Tam iş akışı seçeneği
+python git_yapilacaklar.py
+# Seçim: 5
+# Adımları takip et
+```
+
+Bu script sayesinde Git komutlarını tek tek yazmak yerine interaktif menü üzerinden kolayca yönetebilirsiniz.
+
+## 📚 Git ve GitHub İş Akışı (15 Yaşında Birine Anlatır Gibi)
+
+### Git Nedir?
+Git, kodlarınızın geçmişini takip eden bir sistem. Bir Word belgesinde "Geri Al" tuşuna basmak gibi, ama çok daha güçlü.
+
+### GitHub Nedir?
+GitHub, kodlarımızı sakladığımız bir bulut servisi. Google Drive'a dosya yükler gibi, biz de kodlarımızı GitHub'a yüklüyoruz.
+
+### Temel Git Komutları ve Ne İşe Yararlar
+
+1. **git status**
+   - "Hangi dosyalar değişti?" sorusuna cevap verir
+   - Hangi branch'te olduğunuzu gösterir
+   - Commit edilmemiş değişiklikleri listeler
+
+2. **git add [dosya]**
+   - "Bu dosyayı kaydetmeye hazırla" demek
+   - Örnek: `git add tasks.md`
+   - Tüm dosyalar için: `git add .`
+
+3. **git commit -m "mesaj"**
+   - "Bu değişiklikleri kaydet" demek
+   - Mesaj kısmı ne yaptığınızı açıklar
+   - Örnek: `git commit -m "test: add filter validation tests"`
+
+4. **git push**
+   - "Bu değişiklikleri GitHub'a yükle" demek
+   - Örnek: `git push origin feature/test-branch`
+
+5. **git pull**
+   - "GitHub'daki son değişiklikleri indir" demek
+   - Örnek: `git pull origin main`
+
+6. **git checkout**
+   - "Başka bir branch'e geç" demek
+   - Yeni branch: `git checkout -b feature/yeni-ozellik`
+   - Var olan branch: `git checkout main`
+
+### Pull Request Nedir?
+Pull Request (PR), "Yazdığım kodları ana projeye ekleyebilir miyiz?" diye sormak demek.
+
+### Pull Request Nasıl Açılır?
+
+1. **Kodları GitHub'a Yükleyin**
+   ```bash
+   git add .
+   git commit -m "feat: add new feature"
+   git push origin feature/your-branch-name
+   ```
+
+2. **GitHub Web Sitesine Gidin**
+   - Tarayıcıda açın: `https://github.com/kullaniciadi/proje-adi`
+
+3. **Pull Request Oluşturun**
+   - Sarı banner'da "Compare & pull request" düğmesine tıklayın
+   - Başlık ve açıklama yazın
+   - "Create pull request" düğmesine tıklayın
+
+4. **Merge Edin**
+   - Yeşil "Merge pull request" düğmesine tıklayın
+   - "Confirm merge" düğmesine tıklayın
+
+5. **Local'i Güncelleyin**
+   ```bash
+   git checkout main
+   git pull origin main
+   ```
+
+### Branch Nedir?
+Branch, projenin farklı versiyonları gibi düşünün. Ana kitabı bozmadan yeni bir bölüm yazmak gibi.
+
+- **main/master**: Ana branch, canlı kod
+- **feature/**: Yeni özellikler için
+- **fix/**: Hata düzeltmeleri için
+- **test/**: Test kodları için
+
+### Git İş Akışı Örneği
+
+1. Yeni feature için branch oluştur
+   ```bash
+   git checkout main
+   git pull origin main
+   git checkout -b feature/yeni-ozellik
+   ```
+
+2. Kod yaz ve commit et
+   ```bash
+   # Kod yaz...
+   git add .
+   git commit -m "feat: implement new feature"
+   ```
+
+3. GitHub'a yükle
+   ```bash
+   git push origin feature/yeni-ozellik
+   ```
+
+4. Pull Request aç (GitHub web sitesinde)
+
+5. Code review ve merge
+
+6. Local'i güncelle
+   ```bash
+   git checkout main
+   git pull origin main
+   ```
+
+### Sık Karşılaşılan Sorunlar
+
+1. **"Permission denied"**
+   - GitHub'a giriş yapmamışsınızdır
+   - Çözüm: GitHub Desktop kullanın veya SSH key ayarlayın
+
+2. **"Merge conflict"**
+   - İki kişi aynı yeri değiştirmiş
+   - Çözüm: Çakışan dosyaları manuel düzenleyin
+
+3. **"Branch already exists"**
+   - Bu isimde branch zaten var
+   - Çözüm: Farklı isim kullanın
+
+### Altın Kurallar
+
+1. Her zaman güncel main'den başlayın
+2. Küçük, sık commitler yapın
+3. Anlamlı commit mesajları yazın
+4. Test etmeden push etmeyin
+5. PR açmadan önce kodunuzu gözden geçirin
+
 # Xpatlat Project Instructions
 
 ## 🎯 Project Philosophy
