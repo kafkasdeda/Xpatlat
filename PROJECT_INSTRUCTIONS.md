@@ -50,6 +50,185 @@ If you are in the desktop app, I can handle file operations for you.
 3. All terminal commands
 4. Copying code I provide into your files
 
+## 🤖 What I Can Do vs What YOU MUST DO
+
+### When I'm in Claude Desktop App:
+- ✅ Read all project files
+- ✅ Create new files and folders
+- ✅ Edit existing files
+- ✅ Delete files
+- ✅ Move/rename files
+- ✅ List directory contents
+- ✅ Update all markdown files (tasks.md, PROJECT_STATUS.md, etc.)
+
+### What YOU MUST DO (Even in Desktop App):
+**BUNU SİZİN YAPMANIZ GEREKİYOR:**
+1. **Git Operations**
+   - `git add .`
+   - `git commit -m "message"`
+   - `git push`
+   - `git checkout`
+   - Branch operations
+   - Merge operations
+
+2. **Terminal Commands**
+   - `npm install`
+   - `npm run dev`
+   - `npm run build`
+   - Running tests
+   - Starting servers
+
+3. **Testing**
+   - Manual testing in browser
+   - Verifying functionality
+   - Cross-browser testing
+
+### When I'm in Browser:
+**BUNU SİZİN YAPMANIZ GEREKİYOR:**
+1. All file operations (create, edit, delete)
+2. All Git operations
+3. All terminal commands
+4. Copying code I provide into your files
+
+## 🧪 STRICT TESTING POLICY
+
+### IRON RULES OF TESTING 🔒
+1. **NO CODE WITHOUT TESTS** - Test yoksa kod yoktur!
+2. **TEST COVERAGE MINIMUM %80** - Altı kabul edilmez!
+3. **TESTLER GEÇMEDEN PR KABUL EDİLMEZ** - Kırmızı = Durdur!
+4. **DEBUG LOGLAR ZORUNLU** - Her kritik noktada log olmalı!
+
+### Testing Workflow
+
+#### Claude'un Sorumlulukları:
+1. Tüm test dosyalarını hazırlar
+2. Test senaryolarını yazar
+3. Mock data ve test utility'lerini oluşturur
+4. Debug log stratejisini belirler
+5. Test konfigürasyonunu hazırlar
+
+#### Kullanıcının Yapacakları:
+```bash
+# 1. Test bağımlılıklarını yükle
+npm install --save-dev vitest @testing-library/react @testing-library/jest-dom
+
+# 2. Testleri çalıştır
+npm run test
+
+# 3. Test coverage raporu
+npm run test:coverage
+
+# 4. Watch mode
+npm run test:watch
+```
+
+### Debug Log Standards 📝
+
+#### Mandatory Debug Logs:
+```javascript
+// Function entry
+console.debug(`[${functionName}] START`, { params });
+
+// Critical points
+console.debug(`[${functionName}] ${checkpoint}`, { state });
+
+// Error situations
+console.error(`[${functionName}] ERROR`, { error, context });
+
+// Performance
+console.time(`[${functionName}]`);
+// ... code ...
+console.timeEnd(`[${functionName}]`);
+
+// Function exit
+console.debug(`[${functionName}] END`, { result });
+```
+
+#### Log Levels:
+- `console.debug()` - Development only
+- `console.info()` - Important information
+- `console.warn()` - Potential issues
+- `console.error()` - Errors only
+
+### Test Categories
+
+1. **Unit Tests**
+   - Every utility function
+   - Every service method
+   - Every hook
+   - Every pure component
+
+2. **Integration Tests**
+   - Component interactions
+   - Hook + Component integration
+   - Service + Component integration
+
+3. **E2E Tests**
+   - Critical user flows
+   - Form submissions
+   - Error scenarios
+
+### Test Coverage Requirements
+
+| Category | Minimum Coverage |
+|----------|------------------|
+| Utils | 95% |
+| Services | 90% |
+| Hooks | 85% |
+| Components | 80% |
+| Overall | 85% |
+
+### Test File Naming
+- Unit tests: `[filename].test.js`
+- Integration tests: `[feature].integration.test.js`
+- E2E tests: `[flow].e2e.test.js`
+
+### Test Structure (AAA Pattern)
+```javascript
+describe('FeatureName', () => {
+  beforeEach(() => {
+    // Arrange - Setup
+  });
+
+  test('should do something', () => {
+    // Arrange
+    const input = { /* test data */ };
+    
+    // Act
+    const result = functionUnderTest(input);
+    
+    // Assert
+    expect(result).toBe(expectedValue);
+  });
+
+  test('should handle edge case', () => {
+    // ...
+  });
+});
+```
+
+### Edge Cases to Test
+1. Empty inputs
+2. Null/undefined values
+3. Invalid data types
+4. Boundary values
+5. Concurrent operations
+6. Error scenarios
+7. Performance limits
+
+### Test Commands in package.json
+```json
+{
+  "scripts": {
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui",
+    "test:debug": "vitest --inspect-brk --single-thread"
+  }
+}
+```
+
 ## 📋 Task Management System
 
 ### Core Principles
@@ -172,22 +351,9 @@ Bu güncellemeleri yapayım mı? (Claude Desktop'ta iseniz)
 | filter:media | Has media | filter:media |
 | lang: | Language | lang:en |
 
-### Testing Requirements
+### Testing Requirements (OLD - See STRICT TESTING POLICY above)
 
-1. **Unit Tests**
-   - All utility functions
-   - URL generation logic
-   - Validation functions
-
-2. **Integration Tests**
-   - Component interactions
-   - Form submissions
-   - State management
-
-3. **Manual Testing**
-   - Cross-browser testing
-   - Responsive design
-   - Edge cases
+[This section moved to STRICT TESTING POLICY with enhanced rules]
 
 ### Documentation Requirements
 
@@ -286,8 +452,10 @@ Bu güncellemeleri yapayım mı? (Claude Desktop'ta iseniz)
 ### Deployment Checklist
 
 1. **Pre-deployment**
-   - [ ] All tests passing
-   - [ ] No console errors
+   - [ ] All tests passing (100% pass rate)
+   - [ ] Test coverage ≥ 85%
+   - [ ] No console.error logs in production
+   - [ ] Performance tests passing
    - [ ] Build successful
    - [ ] Documentation updated
 
@@ -332,4 +500,4 @@ Use these commands in conversation:
 - Ask for clarification if requirements unclear
 
 ---
-*Last Updated: 2025-05-04*
+*Last Updated: 2025-05-05* (Enhanced with Strict Testing Policy)
