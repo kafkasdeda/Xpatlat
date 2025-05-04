@@ -31,6 +31,23 @@
 - Hangi commit'in hangi task'a ait olduğu karışıyor
 - Arama yaparken zorluk çıkıyor
 
+### 4. Büyük Dosyaları Git'e Yükleme
+**Ne Oldu:**
+- Python virtual environment klasörünü (xpatlat_env/) yanlışlıkla Git'e ekledik
+- Node.exe gibi büyük dosyalar GitHub'a yüklendi
+- GitHub 79.48 MB boyutunda dosya uyarısı verdi
+
+**Sorun:**
+- Repository şişiyor
+- Clone/pull işlemleri yavaşlıyor
+- GitHub'da büyük dosya uyarıları
+- Gereksiz binary dosyaların takip edilmesi
+
+**Çözüm:**
+- `.gitignore` dosyası oluşturuldu
+- Virtual environment'lar git'ten çıkarıldı
+- Node modules, build dosyaları vb. ignore edildi
+
 ## ✅ Bundan Sonra Yapılması Gerekenler
 
 ### 1. Her Task İçin Ayrı Branch Kullanma
@@ -147,4 +164,4 @@ refactor/[TASK-ID]-brief-description
 
 *Bu dokümanı her Git hatası yaptığımızda güncelleyelim ki bir daha aynı hatayı yapmayalım!*
 
-*Son güncelleme: 2025-05-04*
+*Son güncelleme: 2025-05-05*

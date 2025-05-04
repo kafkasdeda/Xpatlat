@@ -93,6 +93,17 @@ C:\projeler\Xpatlat
    - Version control sistemi
    - 50 arama limiti (favoriler hariç)
 
+12. **Git Repository Kurulumu** (5 Mayıs 2025) ✅
+   - GitHub'a başarıyla push edildi
+   - Repository adresi: https://github.com/kafkasdeda/Xpatlat
+   - Main ve feature branch'leri oluşturuldu
+   - CORE-003 için Pull Request hazır
+
+13. **.gitignore Eklendi** (5 Mayıs 2025) ✅
+   - Python virtual environment'lar git'ten çıkarıldı
+   - Kapsamlı .gitignore dosyası oluşturuldu
+   - Node modules, build dosyaları, IDE dosyaları eklendi
+
 ### Proje Yapısı
 ```
 Xpatlat/
@@ -124,6 +135,7 @@ Xpatlat/
 │   ├── App.jsx
 │   ├── main.jsx
 │   └── index.css
+├── .gitignore
 ├── postcss.config.cjs
 ├── tailwind.config.js
 ├── vite.config.js
@@ -314,14 +326,16 @@ npm run test
 
 ## 📋 Bir Sonraki Oturumda Yapılacaklar
 
-1. Test hatalarını düzelt (özellikle localStorage ve URL generator)
+1. CORE-003 (URL Validation) için Pull Request oluştur ve merge et
 2. TEST-001 ve TEST-002'yi tamamla
 3. CORE-004 (Advanced operators) implementasyonu
-4. Code coverage'ı %80'in üzerine çıkar
+4. Test coverage'ı %80'in üzerine çıkar
 5. Hazır arama şablonlarını oluştur (CORE-005)
 6. Arama geçmişi UI'nı tamamla (UI-003)
 7. Performance optimizasyonları
 8. E2E test senaryolarını hazırla
+9. README.md dosyasını güncelle (proje kurulumu, kullanım talimatları)
+10. GitHub Actions CI/CD pipeline kurulumu
 
 ## 🎯 Proje Hedefleri
 
