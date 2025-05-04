@@ -1,85 +1,99 @@
 import { TWITTER_OPERATORS, isFilterEmpty } from '../types/filters';
+import { validateFilters } from './filterValidator';
 
 /**
  * Creates a Twitter search URL from filters
  * @param {import('../types/filters').SearchFilters} filters - Search filters
- * @returns {string} Twitter search URL
+ * @returns {{url: string, errors: import('./filterValidator').ValidationError[]}}
  */
 export const createTwitterSearchUrl = (filters) => {
+  // Validate filters first
+  const validationResult = validateFilters(filters);
+  
+  if (!validationResult.isValid) {
+    return {
+      url: '',
+      errors: validationResult.errors
+    };
+  }
+  
+  // Use sanitized filters
+  const sanitizedFilters = validationResult.sanitizedFilters;
+  
   const baseUrl = 'https://twitter.com/search';
   const params = new URLSearchParams();
   
   let queryParts = [];
   
   // Text Search
-  if (filters.textSearch && filters.textSearch.trim()) {
-    queryParts.push(filters.textSearch.trim());
+  if (sanitizedFilters.textSearch) {
+    queryParts.push(sanitizedFilters.textSearch);
   }
   
-  // User filters - handle @ symbol properly
-  if (filters.from && filters.from.trim()) {
-    queryParts.push(`from:${filters.from.trim().replace('@', '')}`);
+  // User filters
+  if (sanitizedFilters.from) {
+    queryParts.push(`from:${sanitizedFilters.from}`);
   }
   
-  if (filters.to && filters.to.trim()) {
-    queryParts.push(`to:${filters.to.trim().replace('@', '')}`);
+  if (sanitizedFilters.to) {
+    queryParts.push(`to:${sanitizedFilters.to}`);
   }
   
   // Date filters
-  if (filters.since) {
-    queryParts.push(`since:${filters.since}`);
+  if (sanitizedFilters.since) {
+    queryParts.push(`since:${sanitizedFilters.since}`);
   }
   
-  if (filters.until) {
-    queryParts.push(`until:${filters.until}`);
+  if (sanitizedFilters.until) {
+    queryParts.push(`until:${sanitizedFilters.until}`);
   }
   
   // Engagement filters
-  if (filters.likesMin && filters.likesMin > 0) {
-    queryParts.push(`min_faves:${filters.likesMin}`);
+  if (sanitizedFilters.likesMin > 0) {
+    queryParts.push(`min_faves:${sanitizedFilters.likesMin}`);
   }
   
-  if (filters.retweetsMin && filters.retweetsMin > 0) {
-    queryParts.push(`min_retweets:${filters.retweetsMin}`);
+  if (sanitizedFilters.minRetweets > 0) {
+    queryParts.push(`min_retweets:${sanitizedFilters.minRetweets}`);
   }
   
   // Language filter
-  if (filters.lang && filters.lang !== '') {
-    queryParts.push(`lang:${filters.lang}`);
+  if (sanitizedFilters.lang && sanitizedFilters.lang !== '') {
+    queryParts.push(`lang:${sanitizedFilters.lang}`);
   }
   
   // Media filters
-  if (filters.media) {
+  if (sanitizedFilters.media) {
     queryParts.push('filter:media');
   }
   
-  if (filters.hasImages) {
+  if (sanitizedFilters.hasImages) {
     queryParts.push('filter:images');
   }
   
-  if (filters.hasVideos) {
+  if (sanitizedFilters.hasVideos) {
     queryParts.push('filter:videos');
   }
   
   // Tweet type filters
-  if (filters.isQuestion) {
+  if (sanitizedFilters.isQuestion) {
     queryParts.push('?');
   }
   
-  if (filters.isReply) {
+  if (sanitizedFilters.isReply) {
     queryParts.push('is:reply');
   }
   
   // Hashtag filters
-  if (filters.hashtags && filters.hashtags.length > 0) {
-    filters.hashtags.forEach(tag => {
+  if (sanitizedFilters.hashtags && sanitizedFilters.hashtags.length > 0) {
+    sanitizedFilters.hashtags.forEach(tag => {
       queryParts.push(`#${tag.replace('#', '')}`);
     });
   }
   
   // Exclude words
-  if (filters.excludeWords && filters.excludeWords.length > 0) {
-    filters.excludeWords.forEach(word => {
+  if (sanitizedFilters.excludeWords && sanitizedFilters.excludeWords.length > 0) {
+    sanitizedFilters.excludeWords.forEach(word => {
       queryParts.push(`-${word}`);
     });
   }
@@ -92,78 +106,14 @@ export const createTwitterSearchUrl = (filters) => {
     params.set('f', 'live'); // Set to "Latest" tweets by default
   }
   
-  return `${baseUrl}?${params.toString()}`;
-};
-
-/**
- * Validates search filters
- * @param {import('../types/filters').SearchFilters} filters
- * @returns {{valid: boolean, errors: string[]}}
- */
-export const validateFilters = (filters) => {
-  const errors = [];
-  
-  // Validate dates
-  if (filters.since && !isValidDateFormat(filters.since)) {
-    errors.push('Since date must be in YYYY-MM-DD format');
-  }
-  
-  if (filters.until && !isValidDateFormat(filters.until)) {
-    errors.push('Until date must be in YYYY-MM-DD format');
-  }
-  
-  // Validate date range
-  if (filters.since && filters.until) {
-    const sinceDate = new Date(filters.since);
-    const untilDate = new Date(filters.until);
-    if (sinceDate > untilDate) {
-      errors.push('Since date must be before until date');
-    }
-  }
-  
-  // Validate numeric values
-  if (filters.likesMin && filters.likesMin < 0) {
-    errors.push('Minimum likes cannot be negative');
-  }
-  
-  if (filters.retweetsMin && filters.retweetsMin < 0) {
-    errors.push('Minimum retweets cannot be negative');
-  }
-  
-  // Validate language
-  if (filters.lang && !isValidLanguageCode(filters.lang)) {
-    errors.push('Invalid language code');
-  }
-  
   return {
-    valid: errors.length === 0,
-    errors
+    url: `${baseUrl}?${params.toString()}`,
+    errors: []
   };
 };
 
-/**
- * Validates date format (YYYY-MM-DD)
- * @param {string} date
- * @returns {boolean}
- */
-const isValidDateFormat = (date) => {
-  if (!date) return false;
-  const regex = /^\d{4}-\d{2}-\d{2}$/;
-  if (!regex.test(date)) return false;
-  
-  const d = new Date(date);
-  return d instanceof Date && !isNaN(d);
-};
-
-/**
- * Validates language code
- * @param {string} lang
- * @returns {boolean}
- */
-const isValidLanguageCode = (lang) => {
-  const validCodes = ['tr', 'en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'ja', 'ko', 'ar', 'zh'];
-  return validCodes.includes(lang);
-};
+// Re-export validation functions from filterValidator
+export { validateFilters, validateField, getErrorMessages } from './filterValidator';
 
 /**
  * Twitter sort options
