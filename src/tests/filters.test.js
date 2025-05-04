@@ -2,6 +2,7 @@
  * Tests for filter type definitions and utilities
  */
 
+import { describe, test, expect } from 'vitest';
 import { 
   isFilterEmpty, 
   isValidDate, 
@@ -10,34 +11,88 @@ import {
   TWITTER_OPERATORS 
 } from '../types/filters';
 
-console.log('Testing filter utilities...');
+describe('Filter utilities', () => {
+  describe('isFilterEmpty', () => {
+    test('should return true for null', () => {
+      expect(isFilterEmpty(null)).toBe(true);
+    });
+    
+    test('should return true for undefined', () => {
+      expect(isFilterEmpty(undefined)).toBe(true);
+    });
+    
+    test('should return true for empty string', () => {
+      expect(isFilterEmpty('')).toBe(true);
+    });
+    
+    test('should return true for 0', () => {
+      expect(isFilterEmpty(0)).toBe(true);
+    });
+    
+    test('should return false for non-empty string', () => {
+      expect(isFilterEmpty('test')).toBe(false);
+    });
+    
+    test('should return false for positive number', () => {
+      expect(isFilterEmpty(100)).toBe(false);
+    });
+  });
 
-// Test isFilterEmpty
-console.assert(isFilterEmpty(null) === true, 'isFilterEmpty: null should be empty');
-console.assert(isFilterEmpty(undefined) === true, 'isFilterEmpty: undefined should be empty');
-console.assert(isFilterEmpty('') === true, 'isFilterEmpty: empty string should be empty');
-console.assert(isFilterEmpty(0) === true, 'isFilterEmpty: 0 should be empty');
-console.assert(isFilterEmpty('test') === false, 'isFilterEmpty: non-empty string should not be empty');
-console.assert(isFilterEmpty(100) === false, 'isFilterEmpty: positive number should not be empty');
+  describe('isValidDate', () => {
+    test('should return true for valid date', () => {
+      expect(isValidDate('2024-01-01')).toBe(true);
+    });
+    
+    test('should return false for invalid month', () => {
+      expect(isValidDate('2024-13-01')).toBe(false);
+    });
+    
+    test('should return false for invalid day', () => {
+      expect(isValidDate('2024-01-32')).toBe(false);
+    });
+    
+    test('should return false for wrong format', () => {
+      expect(isValidDate('2024/01/01')).toBe(false);
+    });
+    
+    test('should return false for empty string', () => {
+      expect(isValidDate('')).toBe(false);
+    });
+    
+    test('should return false for null', () => {
+      expect(isValidDate(null)).toBe(false);
+    });
+  });
 
-// Test isValidDate
-console.assert(isValidDate('2024-01-01') === true, 'isValidDate: valid date should return true');
-console.assert(isValidDate('2024-13-01') === false, 'isValidDate: invalid month should return false');
-console.assert(isValidDate('2024-01-32') === false, 'isValidDate: invalid day should return false');
-console.assert(isValidDate('2024/01/01') === false, 'isValidDate: wrong format should return false');
-console.assert(isValidDate('') === false, 'isValidDate: empty string should return false');
-console.assert(isValidDate(null) === false, 'isValidDate: null should return false');
+  describe('createFilterObject', () => {
+    test('should preserve partial values', () => {
+      const partialFilter = { textSearch: 'test', lang: 'en' };
+      const fullFilter = createFilterObject(partialFilter);
+      
+      expect(fullFilter.textSearch).toBe('test');
+      expect(fullFilter.lang).toBe('en');
+    });
+    
+    test('should use defaults for missing values', () => {
+      const partialFilter = { textSearch: 'test' };
+      const fullFilter = createFilterObject(partialFilter);
+      
+      expect(fullFilter.likesMin).toBe(DEFAULT_FILTERS.likesMin);
+      expect(fullFilter.lang).toBe(DEFAULT_FILTERS.lang);
+    });
+  });
 
-// Test createFilterObject
-const partialFilter = { textSearch: 'test', lang: 'en' };
-const fullFilter = createFilterObject(partialFilter);
-console.assert(fullFilter.textSearch === 'test', 'createFilterObject: should preserve partial values');
-console.assert(fullFilter.lang === 'en', 'createFilterObject: should preserve partial values');
-console.assert(fullFilter.likesMin === DEFAULT_FILTERS.likesMin, 'createFilterObject: should use defaults for missing values');
-
-// Test TWITTER_OPERATORS
-console.assert(TWITTER_OPERATORS.from.syntax === 'from:', 'TWITTER_OPERATORS: from syntax should be correct');
-console.assert(TWITTER_OPERATORS.minFaves.valueType === 'number', 'TWITTER_OPERATORS: minFaves valueType should be number');
-console.assert(TWITTER_OPERATORS.since.valueType === 'date', 'TWITTER_OPERATORS: since valueType should be date');
-
-console.log('All filter tests passed!');
+  describe('TWITTER_OPERATORS', () => {
+    test('from syntax should be correct', () => {
+      expect(TWITTER_OPERATORS.from.syntax).toBe('from:');
+    });
+    
+    test('minFaves valueType should be number', () => {
+      expect(TWITTER_OPERATORS.minFaves.valueType).toBe('number');
+    });
+    
+    test('since valueType should be date', () => {
+      expect(TWITTER_OPERATORS.since.valueType).toBe('date');
+    });
+  });
+});

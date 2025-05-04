@@ -26,10 +26,24 @@ import { isValidDate, TWITTER_OPERATORS } from '../types/filters';
  * @param {number} likes - Minimum likes value to validate
  * @returns {ValidationError|null}
  */
-const validateMinLikes = (likes) => {
-  if (likes === undefined || likes === null || likes === 0) return null;
+export const validateMinLikes = (likes) => {
+  console.debug('[validateMinLikes] START', { likes });
   
-  if (!Number.isInteger(likes)) {
+  if (likes === undefined || likes === null || likes === '') return null;
+  
+  if (typeof likes !== 'number' && (typeof likes === 'string' && isNaN(parseInt(likes)))) {
+    console.debug('[validateMinLikes] ERROR: not a number', { likes });
+    return {
+      field: 'likesMin',
+      message: 'Minimum beğeni sayısı bir sayı olmalıdır',
+      code: 'INVALID_TYPE'
+    };
+  }
+  
+  const numericValue = typeof likes === 'number' ? likes : parseInt(likes);
+  
+  if (!Number.isInteger(numericValue)) {
+    console.debug('[validateMinLikes] ERROR: not integer', { numericValue });
     return {
       field: 'likesMin',
       message: 'Minimum beğeni tam sayı olmalıdır',
@@ -37,7 +51,8 @@ const validateMinLikes = (likes) => {
     };
   }
   
-  if (likes < 0) {
+  if (numericValue < 0) {
+    console.debug('[validateMinLikes] ERROR: negative', { numericValue });
     return {
       field: 'likesMin',
       message: 'Minimum beğeni negatif olamaz',
@@ -45,14 +60,16 @@ const validateMinLikes = (likes) => {
     };
   }
   
-  if (likes > 1000000) {
+  if (numericValue > Number.MAX_SAFE_INTEGER) {
+    console.debug('[validateMinLikes] ERROR: too large', { numericValue });
     return {
       field: 'likesMin',
-      message: 'Minimum beğeni çok yüksek (maksimum 1.000.000)',
+      message: 'Sayı çok büyük',
       code: 'VALUE_TOO_HIGH'
     };
   }
   
+  console.debug('[validateMinLikes] END', { result: null });
   return null;
 };
 
@@ -149,8 +166,10 @@ const validateDateRange = (since, until) => {
  * @param {string} lang - Language code to validate
  * @returns {ValidationError|null}
  */
-const validateLanguage = (lang) => {
-  if (!lang) return null;
+export const validateLanguage = (lang) => {
+  console.debug('[validateLanguage] START', { lang });
+  
+  if (!lang || lang === '') return null;
   
   // Common Twitter language codes
   const validLanguages = [
@@ -160,14 +179,26 @@ const validateLanguage = (lang) => {
     'uk', 'ur', 'vi', 'zh-cn', 'zh-tw'
   ];
   
-  if (!validLanguages.includes(lang.toLowerCase())) {
+  // Check format first
+  if (lang.length !== 2) {
+    console.debug('[validateLanguage] ERROR: invalid format', { lang });
     return {
-      field: 'lang',
-      message: 'Geçersiz dil kodu',
+      field: 'language',
+      message: 'Dil kodu 2 karakter olmalıdır (örn: en, tr)',
+      code: 'INVALID_FORMAT'
+    };
+  }
+  
+  if (!validLanguages.includes(lang.toLowerCase())) {
+    console.debug('[validateLanguage] ERROR: unknown language', { lang });
+    return {
+      field: 'language',
+      message: 'Bilinmeyen dil kodu',
       code: 'INVALID_LANGUAGE'
     };
   }
   
+  console.debug('[validateLanguage] END', { result: null });
   return null;
 };
 
@@ -177,20 +208,46 @@ const validateLanguage = (lang) => {
  * @param {'from'|'to'} field - Field name
  * @returns {ValidationError|null}
  */
-const validateUsername = (username, field) => {
-  if (!username) return null;
+export const validateUsername = (username, field) => {
+  console.debug(`[validateUsername] START`, { username, field });
+  
+  if (!username || username === '') return null;
+  
+  // Check for @ symbol
+  if (username.includes('@')) {
+    console.debug(`[validateUsername] ERROR: @ in username`, { username });
+    return {
+      field,
+      message: 'Kullanıcı adını @ işareti olmadan yazın',
+      code: 'INVALID_USERNAME_AT'
+    };
+  }
+  
+  // Remove @ if present
+  const cleanUsername = username.startsWith('@') ? username.substring(1) : username;
   
   // Twitter username rules
   const usernameRegex = /^[A-Za-z0-9_]{1,15}$/;
   
-  if (!usernameRegex.test(username)) {
+  if (cleanUsername.length > 15) {
+    console.debug(`[validateUsername] ERROR: too long`, { username });
     return {
       field,
-      message: 'Geçersiz kullanıcı adı (1-15 karakter, sadece harf, rakam ve alt çizgi)',
+      message: 'Kullanıcı adı en fazla 15 karakter olabilir',
+      code: 'USERNAME_TOO_LONG'
+    };
+  }
+  
+  if (!usernameRegex.test(cleanUsername)) {
+    console.debug(`[validateUsername] ERROR: invalid characters`, { username });
+    return {
+      field,
+      message: 'Geçersiz kullanıcı adı (sadece harf, rakam ve alt çizgi kullanılabilir)',
       code: 'INVALID_USERNAME'
     };
   }
   
+  console.debug(`[validateUsername] END`, { result: null });
   return null;
 };
 
@@ -199,10 +256,13 @@ const validateUsername = (username, field) => {
  * @param {string} text - Text search query
  * @returns {ValidationError|null}
  */
-const validateTextSearch = (text) => {
-  if (!text) return null;
+export const validateTextSearch = (text) => {
+  console.debug('[validateTextSearch] START', { text });
+  
+  if (!text || text === '') return null;
   
   if (text.length > 500) {
+    console.debug('[validateTextSearch] ERROR: too long', { length: text.length });
     return {
       field: 'textSearch',
       message: 'Arama metni çok uzun (maksimum 500 karakter)',
@@ -213,6 +273,7 @@ const validateTextSearch = (text) => {
   // Check for balanced quotes
   const doubleQuotes = (text.match(/"/g) || []).length;
   if (doubleQuotes % 2 !== 0) {
+    console.debug('[validateTextSearch] ERROR: unbalanced quotes', { doubleQuotes });
     return {
       field: 'textSearch',
       message: 'Tırnak işaretleri dengeli değil',
@@ -220,6 +281,7 @@ const validateTextSearch = (text) => {
     };
   }
   
+  console.debug('[validateTextSearch] END', { result: null });
   return null;
 };
 
@@ -229,6 +291,24 @@ const validateTextSearch = (text) => {
  * @returns {ValidationResult}
  */
 export const validateFilters = (filters) => {
+  // Handle null, undefined or non-object inputs
+  if (!filters || typeof filters !== 'object') {
+    return {
+      isValid: true,
+      errors: [],
+      sanitizedFilters: {}
+    };
+  }
+  
+  // Handle string input (convert to object)
+  if (typeof filters === 'string') {
+    return {
+      isValid: true,
+      errors: [],
+      sanitizedFilters: {}
+    };
+  }
+  
   const errors = [];
   
   // Validate text search
@@ -252,10 +332,10 @@ export const validateFilters = (filters) => {
   if (langError) errors.push(langError);
   
   // Validate usernames
-  const fromError = validateUsername(filters.from, 'from');
+  const fromError = validateUsername(filters.from || filters.fromUser, 'from');
   if (fromError) errors.push(fromError);
   
-  const toError = validateUsername(filters.to, 'to');
+  const toError = validateUsername(filters.to || filters.toUser, 'to');
   if (toError) errors.push(toError);
   
   // Return validation result
@@ -266,27 +346,8 @@ export const validateFilters = (filters) => {
     };
   }
   
-  // Sanitize filters if valid
-  const sanitizedFilters = {
-    ...filters,
-    // Trim whitespace
-    textSearch: filters.textSearch?.trim() || '',
-    from: filters.from?.trim() || '',
-    to: filters.to?.trim() || '',
-    lang: filters.lang?.toLowerCase() || 'tr',
-    // Ensure numbers are integers
-    likesMin: Math.max(0, parseInt(filters.likesMin) || 0),
-    minRetweets: Math.max(0, parseInt(filters.minRetweets) || 0),
-    // Ensure dates are properly formatted
-    since: filters.since || '',
-    until: filters.until || '',
-    // Boolean values
-    media: Boolean(filters.media),
-    hasImages: Boolean(filters.hasImages),
-    hasVideos: Boolean(filters.hasVideos),
-    isQuestion: Boolean(filters.isQuestion),
-    isReply: Boolean(filters.isReply)
-  };
+  // Sanitize filters if valid - now returns completely sanitized object
+  const sanitizedFilters = sanitizeFilters(filters);
   
   return {
     isValid: true,
@@ -295,13 +356,124 @@ export const validateFilters = (filters) => {
   };
 };
 
+// Export individual validators for testing
+export { 
+  validateTextSearch,
+  validateMinLikes,
+  validateMinRetweets,
+  validateDateRange,
+  validateLanguage,
+  validateUsername,
+  validateDate,
+  sanitizeFilters
+};
+
 /**
- * Gets user-friendly error messages
- * @param {ValidationError[]} errors - Validation errors
- * @returns {string[]}
+ * Validates if a date string is valid
+ * @param {string} date - Date string to validate
+ * @returns {ValidationError|null}
  */
-export const getErrorMessages = (errors) => {
-  return errors.map(error => error.message);
+export const validateDate = (date) => {
+  if (!date) return null;
+  
+  if (!isValidDate(date)) {
+    return {
+      field: date.includes('-') && date.split('-')[0].length === 4 ? 'date' : 'date',
+      message: 'Geçersiz tarih formatı (YYYY-MM-DD olmalı)',
+      code: 'INVALID_DATE_FORMAT'
+    };
+  }
+  
+  // Check if date is a valid date (not something like 2024-13-01)
+  const dateObj = new Date(date);
+  const parts = date.split('-');
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10);
+  const day = parseInt(parts[2], 10);
+  
+  if (dateObj.getFullYear() !== year || 
+      dateObj.getMonth() + 1 !== month || 
+      dateObj.getDate() !== day) {
+    return {
+      field: 'date',
+      message: 'Invalid date',
+      code: 'INVALID_DATE_VALUE'
+    };
+  }
+  
+  return null;
+};
+
+/**
+ * Sanitizes filter values
+ * @param {import('../types/filters').SearchFilters} filters
+ * @returns {import('../types/filters').SearchFilters}
+ */
+export const sanitizeFilters = (filters) => {
+  if (!filters || typeof filters !== 'object') {
+    return {};
+  }
+  
+  const sanitized = {};
+  
+  // Text fields - trim and skip empty
+  const textFields = ['textSearch'];
+  textFields.forEach(field => {
+    const value = filters[field];
+    if (value && typeof value === 'string' && value.trim()) {
+      sanitized[field] = value.trim();
+    }
+  });
+  
+  // Handle username fields (remove @ symbol) - check both field names
+  const userFields = [
+    { field: 'from', altField: 'fromUser' },
+    { field: 'to', altField: 'toUser' }
+  ];
+  
+  userFields.forEach(({ field, altField }) => {
+    const value = filters[field] || filters[altField];
+    if (value && typeof value === 'string' && value.trim()) {
+      sanitized[field] = value.replace('@', '').trim();
+    }
+  });
+  
+  // Number fields - only include if > 0
+  const numberFields = ['likesMin', 'retweetsMin'];
+  numberFields.forEach(field => {
+    const value = filters[field];
+    if (value !== undefined && value !== null && value !== '') {
+      const numericValue = typeof value === 'number' ? value : parseInt(value);
+      if (!isNaN(numericValue) && numericValue > 0) {
+        sanitized[field] = numericValue;
+      }
+    }
+  });
+  
+  // Date fields - only include if valid
+  const dateFields = ['since', 'until'];
+  dateFields.forEach(field => {
+    const value = filters[field];
+    if (value && isValidDate(value)) {
+      sanitized[field] = value;
+    }
+  });
+  
+  // Language field - check both field names
+  const langValue = filters.lang || filters.language;
+  if (langValue && langValue !== 'tr') {
+    sanitized.language = langValue.toLowerCase();
+  }
+  
+  // Boolean fields - only include if true
+  const booleanFields = ['hasMedia', 'hasImages', 'hasVideos', 'isQuestion', 'isReply'];
+  booleanFields.forEach(field => {
+    if (filters[field] === true) {
+      sanitized[field] = true;
+    }
+  });
+  
+  return sanitized;
 };
 
 /**

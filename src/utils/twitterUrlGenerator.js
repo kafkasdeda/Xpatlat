@@ -7,10 +7,13 @@ import { validateFilters } from './filterValidator';
  * @returns {{url: string, errors: import('./filterValidator').ValidationError[]}}
  */
 export const createTwitterSearchUrl = (filters) => {
+  console.debug('[createTwitterSearchUrl] START', { filters });
+  
   // Validate filters first
   const validationResult = validateFilters(filters);
   
   if (!validationResult.isValid) {
+    console.debug('[createTwitterSearchUrl] Validation failed', { errors: validationResult.errors });
     return {
       url: '',
       errors: validationResult.errors
@@ -21,8 +24,6 @@ export const createTwitterSearchUrl = (filters) => {
   const sanitizedFilters = validationResult.sanitizedFilters;
   
   const baseUrl = 'https://twitter.com/search';
-  const params = new URLSearchParams();
-  
   let queryParts = [];
   
   // Text Search
@@ -30,58 +31,58 @@ export const createTwitterSearchUrl = (filters) => {
     queryParts.push(sanitizedFilters.textSearch);
   }
   
-  // User filters
-  if (sanitizedFilters.from) {
-    queryParts.push(`from:${sanitizedFilters.from}`);
+  // User filters - check both field names for backward compatibility
+  if (sanitizedFilters.from || filters.from) {
+    queryParts.push(`from:${sanitizedFilters.from || filters.from}`);
   }
   
-  if (sanitizedFilters.to) {
-    queryParts.push(`to:${sanitizedFilters.to}`);
+  if (sanitizedFilters.to || filters.to) {
+    queryParts.push(`to:${sanitizedFilters.to || filters.to}`);
   }
   
   // Date filters
-  if (sanitizedFilters.since) {
-    queryParts.push(`since:${sanitizedFilters.since}`);
+  if (sanitizedFilters.since || filters.since) {
+    queryParts.push(`since:${sanitizedFilters.since || filters.since}`);
   }
   
-  if (sanitizedFilters.until) {
-    queryParts.push(`until:${sanitizedFilters.until}`);
+  if (sanitizedFilters.until || filters.until) {
+    queryParts.push(`until:${sanitizedFilters.until || filters.until}`);
   }
   
   // Engagement filters
-  if (sanitizedFilters.likesMin > 0) {
-    queryParts.push(`min_faves:${sanitizedFilters.likesMin}`);
+  if (sanitizedFilters.likesMin > 0 || filters.likesMin > 0) {
+    queryParts.push(`min_faves:${sanitizedFilters.likesMin || filters.likesMin}`);
   }
   
-  if (sanitizedFilters.minRetweets > 0) {
-    queryParts.push(`min_retweets:${sanitizedFilters.minRetweets}`);
+  if (sanitizedFilters.retweetsMin > 0 || filters.retweetsMin > 0) {
+    queryParts.push(`min_retweets:${sanitizedFilters.retweetsMin || filters.retweetsMin}`);
   }
   
-  // Language filter
-  if (sanitizedFilters.lang && sanitizedFilters.lang !== '') {
-    queryParts.push(`lang:${sanitizedFilters.lang}`);
+  // Language filter - only add if explicitly set
+  if (filters.language && filters.language !== 'tr') {
+    queryParts.push(`lang:${filters.language}`);
   }
   
   // Media filters
-  if (sanitizedFilters.media) {
+  if (sanitizedFilters.hasMedia || filters.hasMedia) {
     queryParts.push('filter:media');
   }
   
-  if (sanitizedFilters.hasImages) {
+  if (sanitizedFilters.hasImages || filters.hasImages) {
     queryParts.push('filter:images');
   }
   
-  if (sanitizedFilters.hasVideos) {
+  if (sanitizedFilters.hasVideos || filters.hasVideos) {
     queryParts.push('filter:videos');
   }
   
   // Tweet type filters
-  if (sanitizedFilters.isQuestion) {
+  if (sanitizedFilters.isQuestion || filters.isQuestion) {
     queryParts.push('?');
   }
   
-  if (sanitizedFilters.isReply) {
-    queryParts.push('is:reply');
+  if (sanitizedFilters.isReply || filters.isReply) {
+    queryParts.push('filter:replies');
   }
   
   // Hashtag filters
@@ -98,17 +99,25 @@ export const createTwitterSearchUrl = (filters) => {
     });
   }
   
-  // Combine all query parts
-  const queryString = queryParts.join(' ');
-  
-  if (queryString) {
-    params.set('q', queryString);
-    params.set('f', 'live'); // Set to "Latest" tweets by default
+  // If no query parts, return empty URL without any parameters
+  if (queryParts.length === 0) {
+    console.debug('[createTwitterSearchUrl] No query parts, returning empty URL');
+    return {
+      url: `${baseUrl}?q=`,
+      errors: undefined
+    };
   }
   
+  // Combine all query parts and properly encode
+  const queryString = queryParts.join(' ');
+  
+  // Properly encode the URL - use encodeURIComponent for the query string
+  const url = `${baseUrl}?q=${encodeURIComponent(queryString)}`;
+  
+  console.debug('[createTwitterSearchUrl] END', { url });
   return {
-    url: `${baseUrl}?${params.toString()}`,
-    errors: []
+    url,
+    errors: undefined
   };
 };
 

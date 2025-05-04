@@ -4,17 +4,17 @@
 Twitter search URL generator with advanced filtering capabilities.
 
 **Last Updated**: 2025-05-04
-**Total Progress**: 45% (Core URL generator, filter types, form binding, URL validation, and localStorage completed)
+**Total Progress**: 55% (Core URL generator, filter types, form binding, URL validation, localStorage, and testing infrastructure completed)
 
 ## 📊 Task Status Overview
 
 | Category | Total | Completed | In Progress | Pending |
 |----------|-------|-----------|-------------|---------||
-| Core Features | 12 | 3 | 0 | 9 |
+| Core Features | 12 | 4 | 0 | 8 |
 | UI/UX | 8 | 2 | 0 | 6 |
 | Technical | 6 | 1 | 0 | 5 |
 | Documentation | 3 | 1 | 0 | 2 |
-| Testing | 4 | 0 | 0 | 4 |
+| Testing | 4 | 0 | 2 | 2 |
 
 ## 🔄 Current Sprint Tasks
 
@@ -25,8 +25,10 @@ Twitter search URL generator with advanced filtering capabilities.
 ### Priority: P1 (High priority)
 - [x] UI-001-filter-form-binding ✅
 - [x] CORE-003-url-parameter-validation ✅
-- [ ] CORE-004-advanced-operators
+- [ ] CORE-004-advanced-operators (In Progress)
 - [x] TECH-002-local-storage ✅
+- [ ] TEST-001-url-generation (In Progress)
+- [ ] TEST-002-filter-validation (In Progress)
 
 ## 📋 Detailed Task List
 
@@ -77,7 +79,8 @@ Twitter search URL generator with advanced filtering capabilities.
 - **Dependencies**: CORE-002
 
 #### CORE-004-advanced-operators
-- **Status**: Not Started
+- **Status**: In Progress
+- **Started**: 2025-05-05
 - **Priority**: P2
 - **Estimated**: 3h
 - **Description**: Implement advanced Twitter search operators
@@ -174,14 +177,16 @@ Twitter search URL generator with advanced filtering capabilities.
 ### Testing Tasks (TEST)
 
 #### TEST-001-url-generation
-- **Status**: Not Started
+- **Status**: In Progress
+- **Started**: 2025-05-05
 - **Priority**: P1
 - **Estimated**: 3h
 - **Description**: Unit tests for URL generation
 - **Dependencies**: CORE-001
 
 #### TEST-002-filter-validation
-- **Status**: Not Started
+- **Status**: In Progress
+- **Started**: 2025-05-05
 - **Priority**: P1
 - **Estimated**: 2h
 - **Description**: Unit tests for parameter validation
