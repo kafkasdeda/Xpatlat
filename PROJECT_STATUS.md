@@ -137,6 +137,27 @@ C:\projeler\Xpatlat
    - Question (?) ve reply filtreleri ✅
    - NOT: Tüm özellikler aslında CORE-001'de implement edilmişti
 
+17. **Search History UI Tamamlandı** (4 Mayıs 2025) ✅
+   - SearchHistory bileşeni oluşturuldu
+   - Son aramaları listeleme özelliği eklendi
+   - Tıklayınca arama yükleme fonksiyonu
+   - Geçmişi temizleme butonu
+   - Favori işaretleme sistemi
+   - Delete confirmation UI
+   - Relative timestamp gösterimi
+   - Filter preview badges
+   - NOT: TECH-002 implementasyonu sırasında tamamlanmıştı
+
+18. **README.md Güncellendi** (5 Mayıs 2025) ✅
+   - Kapsamlı proje açıklaması eklendi
+   - Detaylı kurulum adımları yazıldı
+   - Basit ve gelişmiş kullanım örnekleri eklendi
+   - Twitter operatörleri 4 kategoride gruplandı
+   - Katkıda bulunma rehberi detaylandırıldı
+   - Test coverage hedefleri açıklandı
+   - Gelecek özellikler (roadmap) eklendi
+   - Etik kullanım prensipleri vurgulandı
+
 ### Proje Yapısı
 ```
 Xpatlat/
@@ -200,7 +221,8 @@ Twitter'da belirli kriterlere göre (tarih aralığı, beğeni sayısı, etkile�
 
 ### 2. UI/UX İyileştirmeleri
 - [ ] Hazır arama şablonları
-- [ ] Favori aramalar sistemi
+- [x] Favori aramalar sistemi ✅
+- [x] Arama geçmişi UI ✅
 - [ ] Arama sonucu önizleme
 - [ ] Responsive tasarım iyileştirmeleri
 
@@ -209,7 +231,7 @@ Twitter'da belirli kriterlere göre (tarih aralığı, beğeni sayısı, etkile�
 - [x] Local storage entegrasyonu ✅
 - [x] URL parametrelerini doğrulama ✅
 - [ ] Hata yönetimi
-- [ ] Test altyapısı
+- [x] Test altyapısı ✅
 
 ## 🛠️ Teknik Detaylar
 
@@ -360,13 +382,13 @@ npm run test
 ## 📋 Bir Sonraki Oturumda Yapılacaklar
 
 1. CORE-005 (Search templates) implementasyonu
-2. UI-003 (Search history UI) tamamla
-3. DOC-003 (README update) yaz
-4. Test coverage'ı %80'in üzerine çıkar
-5. Performance optimizasyonları
-6. E2E test senaryolarını hazırla
-7. GitHub Actions CI/CD pipeline kurulumu
-8. Responsive design iyileştirmeleri
+2. ✅ DOC-003 (README update) tamamlandı
+3. Test coverage'ı %85'in üzerine çıkar
+4. Performance optimizasyonları
+5. E2E test senaryolarını hazırla
+6. GitHub Actions CI/CD pipeline kurulumu
+7. Responsive design iyileştirmeleri
+8. Dark mode desteği ekle
 
 ## 🎯 Proje Hedefleri
 
@@ -381,4 +403,4 @@ npm run test
 
 ---
 
-*Son güncelleme: 5 Mayıs 2025 (CORE-004 tamamlandı)*
+*Son güncelleme: 5 Mayıs 2025 (DOC-003 tamamlandı)*
