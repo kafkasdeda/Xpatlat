@@ -122,7 +122,7 @@ export const createTwitterSearchUrl = (filters) => {
 };
 
 // Re-export validation functions from filterValidator
-export { validateFilters, validateField, getErrorMessages } from './filterValidator';
+export { validateFilters, validateField } from './filterValidator';
 
 /**
  * Twitter sort options

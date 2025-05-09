@@ -1,17 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import SearchTemplates from './SearchTemplates';
+import { getTemplateFilters } from '../data/searchTemplates';
 
 /**
  * @typedef {import('../types/filters').SearchFilters} SearchFilters
  */
 
 /**
- * FilterPanel Component - Twitter search filters
+ * FilterPanel Component - Twitter search filters with templates
  * @param {Object} props
  * @param {SearchFilters} props.filters - Current filter values
  * @param {(filters: SearchFilters) => void} props.onFilterChange - Filter change handler
  * @param {(field: string, value: any) => void} props.onUpdate - Legacy update handler for compatibility
  */
 const FilterPanel = ({ filters, onFilterChange, onUpdate }) => {
+  const [selectedTemplateId, setSelectedTemplateId] = useState(null);
+
   // Handle input changes - support both new and old handlers
   const handleInputChange = (field, value) => {
     if (onFilterChange) {
@@ -36,9 +40,36 @@ const FilterPanel = ({ filters, onFilterChange, onUpdate }) => {
     handleInputChange(field, checked);
   };
 
+  // Handle template selection
+  const handleTemplateSelect = (template) => {
+    setSelectedTemplateId(template.id);
+    
+    // Apply template filters
+    const templateFilters = getTemplateFilters(template.id);
+    if (templateFilters && onFilterChange) {
+      // Merge template filters with existing filters
+      const newFilters = {
+        ...filters,
+        ...templateFilters
+      };
+      onFilterChange(newFilters);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-xl font-bold text-gray-800 mb-4">Search Filters</h2>
+      
+      {/* Search Templates */}
+      <SearchTemplates 
+        onSelectTemplate={handleTemplateSelect}
+        selectedTemplateId={selectedTemplateId}
+      />
+      
+      {/* Divider */}
+      <div className="border-t border-gray-200 my-6"></div>
+      
+      <h3 className="text-lg font-semibold text-gray-800 mb-4">Özel Filtreler</h3>
       
       {/* Text Search */}
       <div className="mb-4">
@@ -123,7 +154,7 @@ const FilterPanel = ({ filters, onFilterChange, onUpdate }) => {
           <input
             type="range"
             min="0"
-            max="1000"
+            max="10000"
             step="10"
             value={filters.likesMin || 0}
             onChange={(e) => handleNumberChange('likesMin', e.target.value)}
@@ -152,8 +183,8 @@ const FilterPanel = ({ filters, onFilterChange, onUpdate }) => {
             Language
           </label>
           <select
-            value={filters.lang || ''}
-            onChange={(e) => handleInputChange('lang', e.target.value)}
+            value={filters.language || ''}
+            onChange={(e) => handleInputChange('language', e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Any Language</option>
@@ -164,20 +195,96 @@ const FilterPanel = ({ filters, onFilterChange, onUpdate }) => {
             <option value="de">Deutsch</option>
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Media
-          </label>
-          <div className="flex items-center mt-2">
+      </div>
+
+      {/* Media Type Filters */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Media Types
+        </label>
+        <div className="space-y-2">
+          <div className="flex items-center">
             <input
               type="checkbox"
-              id="media-filter"
-              checked={filters.media || false}
-              onChange={(e) => handleCheckboxChange('media', e.target.checked)}
+              id="media-any"
+              checked={filters.mediaTypes?.any || false}
+              onChange={(e) => handleInputChange('mediaTypes', {
+                ...filters.mediaTypes,
+                any: e.target.checked
+              })}
               className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
             />
-            <label htmlFor="media-filter" className="ml-2 text-sm text-gray-700">
-              Only show tweets with media
+            <label htmlFor="media-any" className="ml-2 text-sm text-gray-700">
+              Any media
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="media-images"
+              checked={filters.mediaTypes?.images || false}
+              onChange={(e) => handleInputChange('mediaTypes', {
+                ...filters.mediaTypes,
+                images: e.target.checked
+              })}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="media-images" className="ml-2 text-sm text-gray-700">
+              Images only
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="media-videos"
+              checked={filters.mediaTypes?.videos || false}
+              onChange={(e) => handleInputChange('mediaTypes', {
+                ...filters.mediaTypes,
+                videos: e.target.checked
+              })}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="media-videos" className="ml-2 text-sm text-gray-700">
+              Videos only
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Exclude Filters */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Exclude
+        </label>
+        <div className="space-y-2">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="exclude-retweets"
+              checked={filters.exclude?.retweets || false}
+              onChange={(e) => handleInputChange('exclude', {
+                ...filters.exclude,
+                retweets: e.target.checked
+              })}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="exclude-retweets" className="ml-2 text-sm text-gray-700">
+              Exclude retweets
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="exclude-replies"
+              checked={filters.exclude?.replies || false}
+              onChange={(e) => handleInputChange('exclude', {
+                ...filters.exclude,
+                replies: e.target.checked
+              })}
+              className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label htmlFor="exclude-replies" className="ml-2 text-sm text-gray-700">
+              Exclude replies
             </label>
           </div>
         </div>
@@ -186,10 +293,15 @@ const FilterPanel = ({ filters, onFilterChange, onUpdate }) => {
       {/* Reset Button */}
       <div className="mt-6">
         <button
-          onClick={() => handleInputChange(null, {})}
+          onClick={() => {
+            setSelectedTemplateId(null);
+            if (onFilterChange) {
+              onFilterChange({});
+            }
+          }}
           className="w-full px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200"
         >
-          Reset Filters
+          Reset All Filters
         </button>
       </div>
     </div>

@@ -78,7 +78,7 @@ export const validateMinLikes = (likes) => {
  * @param {number} retweets - Minimum retweets value to validate
  * @returns {ValidationError|null}
  */
-const validateMinRetweets = (retweets) => {
+export const validateMinRetweets = (retweets) => {
   if (retweets === undefined || retweets === null || retweets === 0) return null;
   
   if (!Number.isInteger(retweets)) {
@@ -114,7 +114,7 @@ const validateMinRetweets = (retweets) => {
  * @param {string} until - End date
  * @returns {ValidationError[]}
  */
-const validateDateRange = (since, until) => {
+export const validateDateRange = (since, until) => {
   const errors = [];
   
   if (since && !isValidDate(since)) {
@@ -356,24 +356,14 @@ export const validateFilters = (filters) => {
   };
 };
 
-// Export individual validators for testing
-export { 
-  validateTextSearch,
-  validateMinLikes,
-  validateMinRetweets,
-  validateDateRange,
-  validateLanguage,
-  validateUsername,
-  validateDate,
-  sanitizeFilters
-};
+// Already exported above, removing duplicate exports
 
 /**
  * Validates if a date string is valid
  * @param {string} date - Date string to validate
  * @returns {ValidationError|null}
  */
-export const validateDate = (date) => {
+const validateDate = (date) => {
   if (!date) return null;
   
   if (!isValidDate(date)) {
@@ -409,7 +399,7 @@ export const validateDate = (date) => {
  * @param {import('../types/filters').SearchFilters} filters
  * @returns {import('../types/filters').SearchFilters}
  */
-export const sanitizeFilters = (filters) => {
+const sanitizeFilters = (filters) => {
   if (!filters || typeof filters !== 'object') {
     return {};
   }
@@ -541,3 +531,6 @@ export const validateField = (fieldName, value) => {
       };
   }
 };
+
+// Export validation utilities
+export { validateDate, sanitizeFilters };

@@ -1,231 +1,389 @@
-# Technical Details - Xpatlat Project
+# Xpatlat Teknik Detaylar 🔧
 
-## 🔧 Technology Stack
+## 🏗️ Proje Mimarisi
 
-- **Frontend**: React 19
-- **Build Tool**: Vite
-- **Styling**: Tailwind CSS v3
-- **Testing**: Vitest + Testing Library
-- **Language**: JavaScript (with JSDoc for types)
-- **State Management**: React Hooks
-- **Storage**: LocalStorage
-- **Version Control**: Git + GitHub
-- **Package Manager**: npm
-
-## 📁 Project Structure
-
+### Klasör Yapısı
 ```
-Xpatlat/
-├── docs/                 # Project documentation
+C:\projeler\Xpatlat\
 ├── src/
-│   ├── components/      # React components
-│   │   ├── FilterPanel.jsx
-│   │   ├── ResultsPanel.jsx
-│   │   └── SearchHistory.jsx
-│   ├── pages/           # Page components
-│   │   └── SearchPage.jsx
-│   ├── hooks/           # Custom React hooks
-│   │   ├── useFilters.js
-│   │   └── useSearchHistory.js
-│   ├── services/        # Business logic services
-│   │   └── storageService.js
-│   ├── utils/           # Utility functions
-│   │   ├── twitterUrlGenerator.js
-│   │   └── filterValidator.js
-│   ├── types/           # Type definitions (JSDoc)
-│   │   ├── filters.js
-│   │   └── index.js
-│   ├── tests/           # Test files
-│   │   ├── setup.js
-│   │   ├── filterValidator.test.js
-│   │   ├── twitterUrlGenerator.test.js
+│   ├── components/          # React bileşenleri
+│   │   ├── FilterPanel.jsx  # Filtre formu UI
+│   │   ├── ResultsPanel.jsx # URL sonuç ve kopyalama
+│   │   └── SearchHistory.jsx # Arama geçmişi UI
+│   ├── pages/
+│   │   └── SearchPage.jsx   # Ana sayfa bileşeni
+│   ├── hooks/               # Custom React hooks
+│   │   ├── useFilters.js    # Filtre state yönetimi
+│   │   └── useSearchHistory.js # Arama geçmişi hook
+│   ├── services/
+│   │   └── storageService.js # LocalStorage yönetimi
+│   ├── utils/
+│   │   ├── twitterUrlGenerator.js # URL oluşturma
+│   │   └── filterValidator.js # Form validasyonu
+│   ├── types/
+│   │   ├── filters.js       # JSDoc type tanımları
+│   │   └── index.js         # Type exports
+│   ├── tests/               # Test dosyaları
+│   │   ├── setup.js         # Test konfigürasyonu
+│   │   ├── filterValidator.test.js ✅
+│   │   ├── twitterUrlGenerator.test.js ✅
 │   │   └── storageService.test.js
-│   ├── data/            # Static data
-│   │   └── filters.json
-│   ├── App.jsx          # Root component
-│   ├── main.jsx         # Entry point
-│   └── index.css        # Global styles
-├── .gitignore           # Git ignore rules
-├── postcss.config.cjs   # PostCSS configuration
-├── tailwind.config.js   # Tailwind CSS configuration
-├── vite.config.js       # Vite configuration
-├── package.json         # Project dependencies
-├── tasks.md             # Task tracking
-├── PROJECT_STATUS.md    # Project status
-└── PROJECT_INSTRUCTIONS.md  # Project guidelines
+│   ├── data/
+│   │   └── filters.json     # Filtre meta verileri
+│   ├── App.jsx              # Ana uygulama
+│   ├── main.jsx             # React entry point
+│   └── index.css            # Global stiller
+├── .gitignore               # Git ignore kuralları
+├── postcss.config.cjs       # PostCSS konfigürasyonu
+├── tailwind.config.js       # Tailwind CSS ayarları
+├── vite.config.js           # Vite build konfigürasyonu
+└── package.json             # Proje bağımlılıkları
 ```
 
-## 🛠️ Key Components
+## 🛠️ Teknoloji Stack
 
-### 1. Twitter URL Generator
-- **File**: `src/utils/twitterUrlGenerator.js`
-- **Function**: `createTwitterSearchUrl(filters)`
-- **Features**:
-  - Supports all Twitter search operators
-  - URL encoding
-  - Validation integration
-  - Debug logging
+### Frontend Framework
+- **React 19**: Yeni sürüm özellikleri
+- **Vite**: Modern build tool, hızlı HMR
+- **Tailwind CSS 3**: Utility-first CSS framework
+- **PostCSS**: CSS post-processing
 
-### 2. Filter Validator
-- **File**: `src/utils/filterValidator.js`
-- **Features**:
-  - Text search validation (max 500 chars)
-  - Date format validation (YYYY-MM-DD)
-  - Number validation (likes, retweets)
-  - Username validation (max 15 chars)
-  - Language code validation
-  - Sanitization functions
+### Test Framework
+- **Vitest**: Vite-native test runner
+- **@testing-library/react**: React component testing
+- **@testing-library/jest-dom**: DOM matchers
+- **Coverage**: Vitest coverage reporter
 
-### 3. Storage Service
-- **File**: `src/services/storageService.js`
-- **Features**:
-  - Search history management
-  - Favorites system
-  - 50 search limit (favorites excluded)
-  - Import/Export functionality
-  - Version control
+### Development Tools
+- **ESLint**: Code linting
+- **Prettier**: Code formatting
+- **Git**: Version control
+- **GitHub**: Code repository
 
-### 4. React Components
-- **FilterPanel**: Form inputs for search filters
-- **ResultsPanel**: URL display and actions
-- **SearchHistory**: History management UI
-- **SearchPage**: Main page container
+## 📦 Bağımlılıklar
 
-## 🔍 Twitter Search Operators Implemented
-
-```javascript
-// User filters
-from: "from:username"
-to: "to:username"
-
-// Date filters
-since: "since:YYYY-MM-DD"
-until: "until:YYYY-MM-DD"
-
-// Engagement filters
-min_faves: "min_faves:100"
-min_retweets: "min_retweets:50"
-
-// Content filters
-lang: "lang:en"
-filter:media
-filter:images
-filter:videos
-filter:replies
-
-// Special filters
-isQuestion: "?"
-hashtags: "#tag1 #tag2"
-excludeWords: "-word1 -word2"
+### Production Dependencies
+```json
+{
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}
 ```
 
-## 📊 Current Test Coverage
+### Development Dependencies
+```json
+{
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.5",
+    "vitest": "^1.5.0",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/jest-dom": "^6.1.5"
+  }
+}
+```
 
-- **Total Tests**: 90+
-- **URL Generator Tests**: 40+
-- **Filter Validator Tests**: 50+
-- **Coverage**: ~75% (target: 80%)
+## 🔧 Konfigürasyon Dosyaları
 
-Test files:
-- `src/tests/twitterUrlGenerator.test.js`
-- `src/tests/filterValidator.test.js`
-- `src/tests/storageService.test.js` (pending)
-
-## 🔧 Configuration Files
-
-### Vite Config
+### vite.config.js
 ```javascript
-// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
 export default defineConfig({
   plugins: [react()],
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/tests/setup.js',
+    css: true,
     coverage: {
-      provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/tests/'],
-      thresholds: {
-        global: { branches: 80, functions: 80, lines: 80, statements: 80 }
-      }
+      exclude: [
+        'node_modules/',
+        'src/tests/setup.js',
+      ]
     }
   }
 })
 ```
 
-### Tailwind Config
+### tailwind.config.js
 ```javascript
-// tailwind.config.js
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
-  theme: { extend: {} },
-  plugins: []
-}
-```
-
-## 🎯 Remaining Technical Tasks
-
-1. **Search Templates Implementation** (CORE-005)
-   - Create template data structure
-   - Build UI component
-   - Add template selection logic
-
-2. **Search History UI** (UI-003)
-   - Enhance existing SearchHistory component
-   - Add interactive features
-   - Improve styling
-
-3. **Test Coverage Improvement**
-   - Write tests for StorageService
-   - Add E2E tests
-   - Reach 80% coverage target
-
-4. **Performance Optimizations**
-   - Implement React.memo where needed
-   - Optimize re-renders
-   - Add loading states
-
-5. **Documentation**
-   - Update README.md
-   - Add JSDoc comments
-   - Create user guide
-
-## 💡 Technical Notes
-
-1. **State Management**: Using React hooks (useState, useEffect) for local state
-2. **Type Safety**: JSDoc annotations provide type checking in VS Code
-3. **Error Handling**: All validations return structured error objects
-4. **Debug Logging**: Console.debug used throughout for development
-5. **Styling**: Tailwind CSS utility classes for all styling
-6. **Testing**: Vitest with Testing Library for component tests
-
-## 🔄 Git Branch Strategy
-
-- `main`: Production-ready code
-- `feature/*`: New features
-- `fix/*`: Bug fixes
-- `docs/*`: Documentation updates
-- `test/*`: Test additions/improvements
-
-Branch naming: `type/TASK-ID-brief-description`
-
-## 📦 Dependencies
-
-```json
-{
-  "dependencies": {
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+  theme: {
+    extend: {},
   },
-  "devDependencies": {
-    "@vitejs/plugin-react": "^4.3.4",
-    "vitest": "^3.1.2",
-    "@testing-library/react": "^16.3.0",
-    "@testing-library/jest-dom": "^6.6.3",
-    "tailwindcss": "^3.4.17",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3"
-  }
+  plugins: [],
 }
 ```
+
+### postcss.config.cjs
+```javascript
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+```
+
+## 🏛️ Core Services
+
+### 1. TwitterUrlGenerator
+**Dosya**: `src/utils/twitterUrlGenerator.js`
+**Sorumluluk**: Twitter arama URL'lerini oluşturur
+**Özellikler**:
+- Temel operatörler (from, to, since, until)
+- Gelişmiş operatörler (min_faves, min_retweets)
+- Medya filtreleri (images, videos)
+- Dil ve exclude operatörleri
+- URL encoding
+
+### 2. FilterValidator
+**Dosya**: `src/utils/filterValidator.js`
+**Sorumluluk**: Form inputlarını valide eder
+**Özellikler**:
+- Date format validation
+- Number range validation
+- Username validation
+- Language code validation
+- Text length validation
+- Sanitization
+
+### 3. StorageService
+**Dosya**: `src/services/storageService.js`
+**Sorumluluk**: LocalStorage işlemleri
+**Özellikler**:
+- Search history management
+- Favorites system
+- Import/Export functionality
+- Version control
+- 50 search limit
+
+## 🎨 UI Components
+
+### 1. FilterPanel
+**Props**: `filters`, `onFilterChange`, `onClearFilters`, `validationErrors`
+**Özellikler**:
+- Dynamic form fields
+- Real-time validation
+- Error messages
+- Clear functionality
+
+### 2. ResultsPanel
+**Props**: `generatedUrl`, `onCopyUrl`, `onOpenInTwitter`
+**Özellikler**:
+- URL display
+- Copy button
+- Open in Twitter button
+- Success notifications
+
+### 3. SearchHistory
+**Props**: `history`, `onSelectHistory`, `onDeleteHistory`, `onToggleFavorite`
+**Özellikler**:
+- History list
+- Favorite toggle
+- Delete functionality
+- Import/Export
+
+## 🪝 Custom Hooks
+
+### 1. useFilters
+**Return**: `{ filters, setFilters, clearFilters }`
+**Özellikler**:
+- Filter state management
+- Update handlers
+- Reset functionality
+
+### 2. useSearchHistory
+**Return**: `{ history, addToHistory, clearHistory, toggleFavorite, ... }`
+**Özellikler**:
+- History state management
+- CRUD operations
+- LocalStorage sync
+
+## 📝 Type System (JSDoc)
+
+### SearchFilters Type
+```javascript
+/**
+ * @typedef {Object} SearchFilters
+ * @property {string} textSearch - Arama metni
+ * @property {string} from - Gönderen kullanıcı
+ * @property {string} to - Alıcı kullanıcı
+ * @property {string} likesMin - Minimum beğeni sayısı
+ * @property {string} retweetsMin - Minimum retweet sayısı
+ * @property {string} since - Başlangıç tarihi (YYYY-MM-DD)
+ * @property {string} until - Bitiş tarihi (YYYY-MM-DD)
+ * @property {string} language - Dil kodu (ör: tr, en)
+ * @property {Object} mediaTypes - Medya tipleri
+ * @property {boolean} mediaTypes.images - Resim filtresi
+ * @property {boolean} mediaTypes.videos - Video filtresi
+ * @property {boolean} mediaTypes.any - Herhangi bir medya
+ * @property {Object} exclude - Hariç tutulacaklar
+ * @property {boolean} exclude.retweets - RT'leri hariç tut
+ * @property {boolean} exclude.replies - Yanıtları hariç tut
+ * @property {boolean} exclude.links - Linkleri hariç tut
+ * @property {Object} engagement - Etkileşim filtreleri
+ * @property {boolean} engagement.hasQuestion - Soru içeren
+ * @property {boolean} engagement.hasHashtags - Hashtag içeren
+ */
+```
+
+## 🧪 Test Strategy
+
+### Unit Tests
+- Utility functions (100% coverage hedefi)
+- Services (90% coverage hedefi)
+- Hooks (85% coverage hedefi)
+
+### Integration Tests
+- Component + Hook entegrasyonu
+- Service + Component entegrasyonu
+
+### E2E Tests (Planned)
+- User flows
+- Form submissions
+- Error scenarios
+
+## 🔍 Debug Logging Strategy
+
+### Log Levels
+```javascript
+console.debug() // Development only
+console.info()  // Important information
+console.warn()  // Potential issues
+console.error() // Errors only
+```
+
+### Log Format
+```javascript
+console.debug(`[${functionName}] ${action}`, { context });
+```
+
+## 🌐 Twitter Search Operators
+
+### Basic Operators
+| Operator | Description | Example |
+|----------|-------------|---------|
+| from: | From user | from:nasa |
+| to: | To user | to:spacex |
+| since: | Start date | since:2024-01-01 |
+| until: | End date | until:2024-12-31 |
+
+### Engagement Operators
+| Operator | Description | Example |
+|----------|-------------|---------|
+| min_faves: | Minimum likes | min_faves:100 |
+| min_retweets: | Minimum RTs | min_retweets:50 |
+| filter:replies | Has replies | filter:replies |
+
+### Media Operators
+| Operator | Description | Example |
+|----------|-------------|---------|
+| filter:media | Has media | filter:media |
+| filter:images | Has images | filter:images |
+| filter:videos | Has videos | filter:videos |
+
+### Advanced Operators
+| Operator | Description | Example |
+|----------|-------------|---------|
+| lang: | Language | lang:tr |
+| -filter:retweets | No retweets | -filter:retweets |
+| -filter:replies | No replies | -filter:replies |
+| ? | Questions | ? |
+
+## 🔒 Security Considerations
+
+### Input Validation
+- All user inputs are validated
+- Special characters are encoded
+- Length limits enforced
+
+### Storage Security
+- LocalStorage only (no sensitive data)
+- No API keys or credentials
+- Clear data option available
+
+### URL Security
+- Proper URL encoding
+- No injection vulnerabilities
+- Safe parameter handling
+
+## 🚀 Performance Optimizations
+
+### React Optimizations
+- Functional components
+- Memoization where needed
+- Controlled re-renders
+
+### Build Optimizations
+- Tree shaking
+- Code splitting (planned)
+- Asset optimization
+
+### Runtime Optimizations
+- Debounced inputs
+- Efficient state updates
+- Minimal re-renders
+
+## 📊 Analytics (Planned)
+
+### User Metrics
+- Search usage patterns
+- Popular filter combinations
+- Error rates
+
+### Performance Metrics
+- Page load time
+- Time to interactive
+- Bundle size
+
+## 🔄 CI/CD Pipeline (Planned)
+
+### GitHub Actions
+- Automated testing
+- Coverage reports
+- Build verification
+- Deployment automation
+
+### Deployment Options
+- GitHub Pages
+- Vercel
+- Netlify
+
+## 🎯 Architecture Principles
+
+1. **Separation of Concerns**
+   - UI components are pure
+   - Business logic in services
+   - State management in hooks
+
+2. **Testability**
+   - Small, focused functions
+   - Dependency injection
+   - Mockable services
+
+3. **Maintainability**
+   - Clear file structure
+   - Consistent naming
+   - Comprehensive documentation
+
+4. **Performance**
+   - Minimal dependencies
+   - Efficient algorithms
+   - Optimized re-renders
+
+5. **Security**
+   - Input validation
+   - Output encoding
+   - No sensitive data storage
+
+---
+*Bu doküman proje mimarisi değiştikçe güncellenmelidir*

@@ -459,11 +459,36 @@ describe('FeatureName', () => {
 
 1. **Acceptance criteria'yı kontrol et**
 2. **Test senaryolarını çalıştır**
-3. **Dokümantasyon güncellemeleri yap:**
-   - **tasks.md**: Task statüsünü güncelle (Completed ✅), actual time ekle, completion date ekle
-   - **PROJECT_STATUS.md**: Yeni özellikleri "Tamamlanan İşlemler" bölümüne ekle, proje yapısını güncelle
-   - **README.md**: Eğer kullanıcı-görünür bir özellik eklendiyse
-   - **CHANGELOG.md**: Eğer varsa, değişiklikleri logla
+3. **Dokümantasyon güncellemeleri yap** (Aşağıdaki checklist'i kullan)
+
+#### 📋 ZORUNLU DOKÜMANTASYON GÜNCELLEMELERİ
+
+**HER TASK TAMAMLANDIĞINDA güncellenmesi ZORUNLU dosyalar:**
+
+1. **tasks.md** - ZORUNLU
+   - Task status: "Completed ✅" olarak güncelle
+   - Actual time ekle
+   - Completion date ekle  
+   - Task Status Overview tablosunu güncelle
+   - Total Progress yüzdesini güncelle
+
+2. **PROJECT_STATUS.md** - ZORUNLU
+   - "Tamamlanan İşlemler" bölümüne yeni özelliği ekle
+   - Proje yapısını güncelle (eğer yeni dosyalar eklendiyse)
+   - "Yapılacaklar Listesi" bölümünü güncelle
+   - "Bir Sonraki Oturumda Yapılacaklar" listesini güncelle
+   - "Son güncelleme" tarihini ve tamamlanan task'ı belirt
+
+3. **README.md** - DURUMA GÖRE
+   - Sadece kullanıcı-görünür özellikler eklendiğinde güncelle
+   - Yeni kurulum adımları gerektiren değişiklikler varsa
+   - API kullanımı değiştiyse
+   - Önemli özellikler eklendiyse
+
+4. **CHANGELOG.md** - EĞER VARSA
+   - Major özellikler eklendiğinde
+   - Breaking changes varsa
+   - Versiyon numarası değiştiyse
 
 #### Task Completion Checklist
 ```
@@ -492,10 +517,12 @@ describe('FeatureName', () => {
 📄 Güncellenmesi gereken dosyalar:
 1. tasks.md - Task durumunu Completed yap ✅
 2. PROJECT_STATUS.md - Yeni özelliği ekle
-3. [Diğer gerekli dosyalar]
+3. [Diğer gerekli dosyalar - duruma göre]
 
 Bu güncellemeleri yapayım mı? (Claude Desktop'ta iseniz)
 ```
+
+🚨 **UNUTMA**: Task tamamlandığında MUTLAKA tasks.md ve PROJECT_STATUS.md güncellenmelidir!
 
 ### Code Standards
 

@@ -1,10 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import "./index.css";  // ← dikkat: ./src/index.css değil sadece ./index.css
+import "./index.css";
+import netlifyIdentity from 'netlify-identity-widget';
+import { AuthProvider } from './context/AuthContext';
+
+// Initialize Netlify Identity
+netlifyIdentity.init();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>
 );

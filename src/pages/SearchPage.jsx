@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FilterPanel from '../components/FilterPanel';
 import ResultsPanel from '../components/ResultsPanel';
 import SearchHistory from '../components/SearchHistory';
-import { createTwitterSearchUrl, getErrorMessages } from '../utils/twitterUrlGenerator';
+import { createTwitterSearchUrl } from '../utils/twitterUrlGenerator';
 import { useSearchHistory } from '../hooks/useSearchHistory';
 
 /**
@@ -33,7 +33,7 @@ const SearchPage = () => {
 
   // Legacy handler for backward compatibility
   const updateFilter = (key, value) => {
-    if (key === null && value === {}) {
+    if (key === null && value && Object.keys(value).length === 0) {
       // Reset filters
       setFilters({});
     } else {

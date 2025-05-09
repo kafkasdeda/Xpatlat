@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { storageService } from '../services/storageService';
+import StorageService from '../services/storageService';
 
 /**
  * @typedef {import('../services/storageService').SearchHistoryItem} SearchHistoryItem
@@ -52,11 +52,14 @@ export const useSearchHistory = (options = {}) => {
    */
   const loadHistory = useCallback(() => {
     try {
-      const items = storageService.getSearchHistory({
-        favoritesOnly,
-        limit
-      });
-      setHistory(items);
+      const items = StorageService.getSearchHistory();
+      const filteredItems = favoritesOnly 
+        ? items.filter(item => item.isFavorite)
+        : items;
+      const limitedItems = limit 
+        ? filteredItems.slice(0, limit)
+        : filteredItems;
+      setHistory(limitedItems);
     } catch (error) {
       console.error('Failed to load search history:', error);
       setHistory([]);
@@ -81,12 +84,18 @@ export const useSearchHistory = (options = {}) => {
    */
   const addSearch = useCallback(async (filters, url, title) => {
     try {
-      const item = storageService.addSearchToHistory(filters, url, title);
-      if (item) {
-        // Refresh the history to reflect changes
-        loadHistory();
-      }
-      return item;
+      // Create search item
+      const searchItem = {
+        id: `search-${Date.now()}`,
+        filters,
+        url,
+        title: title || 'Twitter Search',
+        timestamp: Date.now()
+      };
+      
+      StorageService.saveSearch(searchItem);
+      loadHistory();
+      return searchItem;
     } catch (error) {
       console.error('Failed to add search to history:', error);
       return null;
@@ -100,11 +109,11 @@ export const useSearchHistory = (options = {}) => {
    */
   const deleteSearch = useCallback(async (id) => {
     try {
-      const success = storageService.deleteSearch(id);
-      if (success) {
-        loadHistory();
-      }
-      return success;
+      const history = StorageService.getSearchHistory();
+      const updatedHistory = history.filter(item => item.id !== id);
+      localStorage.setItem('twitterSearch_history', JSON.stringify(updatedHistory));
+      loadHistory();
+      return true;
     } catch (error) {
       console.error('Failed to delete search:', error);
       return false;
@@ -118,11 +127,13 @@ export const useSearchHistory = (options = {}) => {
    */
   const toggleFavorite = useCallback(async (id) => {
     try {
-      const success = storageService.toggleFavorite(id);
-      if (success) {
-        loadHistory();
-      }
-      return success;
+      const history = StorageService.getSearchHistory();
+      const searchItem = history.find(item => item.id === id);
+      if (!searchItem) return false;
+      
+      const result = StorageService.toggleFavorite(searchItem);
+      loadHistory();
+      return result;
     } catch (error) {
       console.error('Failed to toggle favorite:', error);
       return false;
@@ -136,11 +147,9 @@ export const useSearchHistory = (options = {}) => {
    */
   const clearHistory = useCallback(async (keepFavorites = true) => {
     try {
-      const success = storageService.clearHistory(keepFavorites);
-      if (success) {
-        loadHistory();
-      }
-      return success;
+      StorageService.clearHistory(keepFavorites);
+      loadHistory();
+      return true;
     } catch (error) {
       console.error('Failed to clear history:', error);
       return false;
@@ -155,11 +164,16 @@ export const useSearchHistory = (options = {}) => {
    */
   const updateSearch = useCallback(async (id, updates) => {
     try {
-      const success = storageService.updateSearch(id, updates);
-      if (success) {
-        loadHistory();
-      }
-      return success;
+      const history = StorageService.getSearchHistory();
+      const index = history.findIndex(item => item.id === id);
+      if (index === -1) return false;
+      
+      const updatedItem = { ...history[index], ...updates };
+      history[index] = updatedItem;
+      
+      localStorage.setItem('twitterSearch_history', JSON.stringify(history));
+      loadHistory();
+      return true;
     } catch (error) {
       console.error('Failed to update search:', error);
       return false;
