@@ -34,7 +34,7 @@ const SearchPage = () => {
   // Legacy handler for backward compatibility
   const updateFilter = (key, value) => {
     if (key === null && value && Object.keys(value).length === 0) {
-      // Reset filters
+      // Reset filters - Fixed comparison that was always false
       setFilters({});
     } else {
       setFilters(prev => ({

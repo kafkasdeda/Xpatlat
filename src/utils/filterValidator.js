@@ -356,8 +356,6 @@ export const validateFilters = (filters) => {
   };
 };
 
-// Already exported above, removing duplicate exports
-
 /**
  * Validates if a date string is valid
  * @param {string} date - Date string to validate
@@ -534,3 +532,5 @@ export const validateField = (fieldName, value) => {
 
 // Export validation utilities
 export { validateDate, sanitizeFilters };
+
+// REMOVED DUPLICATE EXPORTS
