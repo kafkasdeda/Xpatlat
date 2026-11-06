@@ -69,3 +69,4 @@ logs/
 *.bak
 *.tmp
 *.temp
+twitter_cookies.json
